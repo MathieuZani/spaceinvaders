@@ -60,4 +60,9 @@ public class SpaceInvaders {
 		private boolean estDansEspaceDeJeu(int x, int y) {
 			return x < longueur && y < hauteur && x >= 0 && y >= 0;
 		}
+
+		public void deplacerVaisseauVersLaDroite() {
+			if (vaisseau.abscisse()< (longueur-1))
+			vaisseau.seDeplacerVersLaDroite();
+		}
    }
