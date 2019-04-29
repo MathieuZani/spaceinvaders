@@ -10,7 +10,7 @@ public class SpaceInvaders {
 		int longueur;
 	    int hauteur;
 	    Vaisseau vaisseau;
-
+	    
 	    public SpaceInvaders(int longueur, int hauteur) {
 		   this.longueur = longueur;
 		   this.hauteur = hauteur;
@@ -48,12 +48,16 @@ public class SpaceInvaders {
 		private boolean aUnVaisseau() {
 			return vaisseau!=null;
 		}
-	    
+	     
 	    
 	    public void positionnerUnNouveauVaisseau(int x, int y) {
-	    	if (x >= longueur) 
-	    	throw new HorsEspaceJeuException("Vous êtes en dehors de l'espace jeu");
+	    	if (!estDansEspaceDeJeu(x, y)) 
+	    		throw new HorsEspaceJeuException("Vous êtes en dehors de l'espace jeu");
 	    	
 	    	this.vaisseau = new Vaisseau(x, y);
+		}
+
+		private boolean estDansEspaceDeJeu(int x, int y) {
+			return x < longueur && y < hauteur && x >= 0 && y >= 0;
 		}
    }
