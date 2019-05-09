@@ -61,4 +61,8 @@ public class Vaisseau {
 		
 		return dimension.longueur();
 	}
+	
+	public int hauteur() {
+		return this.dimension.hauteur();
+	}
 }
