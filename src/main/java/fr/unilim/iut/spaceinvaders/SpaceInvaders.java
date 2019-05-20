@@ -11,9 +11,6 @@ public class SpaceInvaders implements Jeu {
 	private static final char MARQUE_FIN_LIGNE = '\n';
 	private static final char MARQUE_VIDE = '.';
 	private static final char MARQUE_VAISSEAU = 'V';
-	private static final int MISSILE_VITESSE = 10;
-	private static final int MISSILE_HAUTEUR = 40;
-	private static final int MISSILE_LONGUEUR = 5;
 	int longueur;
 	int hauteur;
 	Vaisseau vaisseau;
@@ -112,9 +109,12 @@ public class SpaceInvaders implements Jeu {
 	        deplacerVaisseauVersLaDroite();
       }
       if (commandeUser.tir) {
-    	  tirerUnMissile(new Dimension(MISSILE_LONGUEUR,MISSILE_HAUTEUR),MISSILE_VITESSE);
+    	  tirerUnMissile(new Dimension(Constante.MISSILE_LONGUEUR,Constante.MISSILE_HAUTEUR),Constante.MISSILE_VITESSE);
       }
-
+      if (commandeUser.tir && !this.aUnMissile()) {
+          tirerUnMissile(new Dimension(Constante.MISSILE_LONGUEUR, Constante.MISSILE_HAUTEUR),
+					Constante.MISSILE_VITESSE);
+	   }
     }
 
 
