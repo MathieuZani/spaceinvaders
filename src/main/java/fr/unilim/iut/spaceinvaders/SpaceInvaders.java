@@ -11,10 +11,12 @@ public class SpaceInvaders implements Jeu {
 	private static final char MARQUE_FIN_LIGNE = '\n';
 	private static final char MARQUE_VIDE = '.';
 	private static final char MARQUE_VAISSEAU = 'V';
+	private static final char MARQUE_ENVAHISSEUR = 'Y';
 	int longueur;
 	int hauteur;
 	Vaisseau vaisseau;
 	Missile missile;
+	Envahisseur envahisseur;
 
 	public SpaceInvaders(int longueur, int hauteur) {
 		this.longueur = longueur;
@@ -38,8 +40,19 @@ public class SpaceInvaders implements Jeu {
 			marque = Constante.MARQUE_VAISSEAU;
 		else if (this.aUnMissileQuiOccupeLaPosition(x, y))
 				marque = Constante.MARQUE_MISSILE;
+		else if (this.aUnEnvahisseurQuiOccupeLaPosition(x, y)) {
+			marque = Constante.MARQUE_ENVAHISSEUR;
+		}
 		else marque = Constante.MARQUE_VIDE;
 		return marque;
+	}
+
+	private boolean aUnEnvahisseurQuiOccupeLaPosition(int x, int y) {
+		return this.aUnEnvahisseur() && envahisseur.occupeLaPosition(x, y);
+	}
+
+	private boolean aUnEnvahisseur() {
+		return envahisseur != null;
 	}
 
 	private boolean aUnMissileQuiOccupeLaPosition(int x, int y) {
@@ -149,6 +162,41 @@ public class SpaceInvaders implements Jeu {
 			this.missile.deplacerVerticalementVers(Direction.HAUT_ECRAN);
 			if (this.missile.ordonneeLaPlusBasse() < 0) {
 				this.missile = null;
+			}
+		}
+
+		public void positionnerUnNouvelEnvahisseur(Dimension dimension, Position position, int vitesse) {
+			int x = position.abscisse();
+			int y = position.ordonnee();
+			
+			if (!estDansEspaceJeu(x, y))
+				throw new HorsEspaceJeuException("La position du vaisseau est en dehors de l'espace jeu");
+
+			int longueurEnvahisseur = dimension.longueur();
+			int hauteurEnvahisseur = dimension.hauteur();
+			
+			if (!estDansEspaceJeu(x + longueurEnvahisseur - 1, y))
+				throw new DebordementEspaceJeuException("Le vaisseau déborde de l'espace jeu vers la droite à cause de sa longueur");
+			if (!estDansEspaceJeu(x, y - hauteurEnvahisseur + 1))
+				throw new DebordementEspaceJeuException("Le vaisseau déborde de l'espace jeu vers le bas à cause de sa hauteur");
+
+			envahisseur = new Envahisseur(dimension,position,vitesse);
+		}
+
+		public void deplacerEnvahisseurVersLaDroite() {
+			if (envahisseur.abscisseLaPlusADroite() < (longueur - 1)) {
+				envahisseur.deplacerHorizontalementVers(Direction.DROITE);
+				if (!estDansEspaceJeu(envahisseur.abscisseLaPlusADroite(), envahisseur.ordonneeLaPlusHaute())) {
+					envahisseur.positionner(longueur - envahisseur.longueur(), envahisseur.ordonneeLaPlusHaute());
+				}
+			}	
+		}
+
+		public void deplacerEnvahisseurVersLaGauche() {
+			if (0 < envahisseur.abscisseLaPlusAGauche())
+				envahisseur.deplacerHorizontalementVers(Direction.GAUCHE);
+			if (!estDansEspaceJeu(envahisseur.abscisseLaPlusAGauche(), envahisseur.ordonneeLaPlusHaute())) {
+				envahisseur.positionner(0, envahisseur.ordonneeLaPlusHaute());
 			}
 		}
 
