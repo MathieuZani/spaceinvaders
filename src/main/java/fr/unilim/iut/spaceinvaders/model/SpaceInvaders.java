@@ -1,4 +1,4 @@
-package fr.unilim.iut.spaceinvaders;
+package fr.unilim.iut.spaceinvaders.model;
 
 import fr.unilim.iut.spaceinvaders.moteurjeu.Commande;
 import fr.unilim.iut.spaceinvaders.moteurjeu.Jeu;
@@ -148,7 +148,7 @@ public class SpaceInvaders implements Jeu {
 
         public void tirerUnMissile(Dimension dimensionMissile, int vitesseMissile) {
  		
- 		   if ((vaisseau.hauteur()+ dimensionMissile.hauteur()) > this.hauteur )
+ 		   if ((vaisseau.hauteur()+ dimensionMissile.hauteur()) > this.hauteur)
  			   throw new MissileException("Pas assez de hauteur libre entre le vaisseau et le haut de l'espace jeu pour tirer le missile");
 
  		   this.missile = this.vaisseau.tirerUnMissile(dimensionMissile,vitesseMissile);
@@ -191,7 +191,7 @@ public class SpaceInvaders implements Jeu {
 				}
 			}	
 		}
-
+		
 		public void deplacerEnvahisseurVersLaGauche() {
 			if (0 < envahisseur.abscisseLaPlusAGauche())
 				envahisseur.deplacerHorizontalementVers(Direction.GAUCHE);
@@ -199,5 +199,19 @@ public class SpaceInvaders implements Jeu {
 				envahisseur.positionner(0, envahisseur.ordonneeLaPlusHaute());
 			}
 		}
-
+		
+		public void deplacerEnvahisseurAutomatiquement() {
+			Direction direction = Direction.GAUCHE;
+			if (envahisseur.abscisseLaPlusADroite() == this.longueur-1)
+				direction = Direction.GAUCHE;
+			if (envahisseur.abscisseLaPlusAGauche() == 0)
+				direction = Direction.DROITE;
+			if (direction == Direction.GAUCHE){
+				deplacerEnvahisseurVersLaGauche();
+			}
+			else
+			{
+				deplacerEnvahisseurVersLaGauche();
+			}
+		}
 }
